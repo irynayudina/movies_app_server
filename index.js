@@ -15,7 +15,11 @@ const userRouter = require("./routes/user.routes.js");
 const FilmController = require('./controllers/FilmController')
 
 const app = express();
-app.use(cors());
+var corsOptions = {
+    origin: 'https://movies-catalog-app.herokuapp.com/*',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+app.use(cors(corsOptions));
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', mainRouter)
