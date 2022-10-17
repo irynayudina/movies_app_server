@@ -322,7 +322,7 @@ router.post('/review/answer', (req, res)=>{
 // uppdating review
 router.post('/review/update', (req, res)=>{
     let text = req.body.text;
-    let rating = req.body.rating
+    let rating = req.body.rating;
     const reviewId = req.body.rwid;
     Review.findOneAndUpdate({_id: mongoose.Types.ObjectId(reviewId)}, 
         {text: text, rating: rating, isUpdated: true}, {new: true}, function (err, docs) {
