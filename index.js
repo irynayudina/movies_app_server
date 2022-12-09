@@ -14,10 +14,14 @@ const userRouter = require("./routes/user.routes.js");
 
 const app = express();
 var corsOptions = {
-    origin: ["https://movies-app-playlists.netlify.app", "https://movies-catalog-app.herokuapp.com/films/all"]//``, *
+    origin: `*`//["https://movies-app-playlists.netlify.app", "https://movies-catalog-app.herokuapp.com/films/all"]//``, *
     // optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 app.use(cors(corsOptions));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', mainRouter)
