@@ -12,11 +12,9 @@ const filmsRouter = require("./routes/film.routes.js")
 const userRouter = require("./routes/user.routes.js");
 
 
-const FilmController = require('./controllers/FilmController')
-
 const app = express();
 var corsOptions = {
-    origin: `https://movies-app-playlists.netlify.app`,
+    origin: ["https://movies-app-playlists.netlify.app"]//``, *
     // optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 app.use(cors(corsOptions));
