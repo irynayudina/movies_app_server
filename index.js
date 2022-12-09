@@ -14,7 +14,7 @@ const userRouter = require("./routes/user.routes.js");
 
 const app = express();
 var corsOptions = {
-    origin: ["https://movies-app-playlists.netlify.app"]//``, *
+    origin: ["https://movies-app-playlists.netlify.app", "https://movies-catalog-app.herokuapp.com/films/all"]//``, *
     // optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 app.use(cors(corsOptions));
