@@ -24,25 +24,31 @@ function genRandPass() {
     return randpass;
 }
 async function sendEmail(email, pw) {
-    const smtpTransport = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-    const mailOptions = {
-      to: email,
-      from: "Movies App",
-      subject: "Password Reset",
-      text:
-        "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
-        "New password is: "+
-        pw +
-        "\n\n",
-    };
+    try {
+        const smtpTransport = nodemailer.createTransport({
+          service: "Gmail",
+          auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS,
+          },
+        });
+        const mailOptions = {
+          to: email,
+          from: "Movies App",
+          subject: "Password Reset",
+          text:
+            "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+            "New password is: " +
+            pw +
+            "\n\n",
+        };
+        await smtpTransport.sendMail(mailOptions);
+    } catch (error) {
+        console.log(error)
+    }
 
-    await smtpTransport.sendMail(mailOptions);
+    console.log(email, pw);
+
 }
 
 function generateAccessToken(user) {
