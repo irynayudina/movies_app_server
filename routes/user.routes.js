@@ -172,21 +172,58 @@ router.post('/forgotpassword', (req, res) => {
             error: "Email is required"
         })
     }
-    let newPw = genRandPass()
-    User.findOne({
-        email: em
-    }, (err, uL) => {
-        if (!err) {
-            uL.password = newPw;
-            uL.pwAttempts = 0;
-            uL.save();
+    let newPw = genRandPass();
+    User.findOne({ email: em }, (err, uL) => {
+      if (err) {
+        console.error("Error finding user:", err);
+        // Handle the error appropriately (e.g., return an error response)
+          res.json({
+            pwEmail: err,
+          });
+        return;
+      }
+
+      if (!uL) {
+        console.log("User not found");
+        // Handle the case where the user was not found (e.g., return a message or redirect)
+          res.json({
+            pwEmail: "User not found",
+          });
+        return;
+      }
+
+      uL.password = newPw;
+      uL.pwAttempts = 0;
+      uL.save((err) => {
+        if (err) {
+          console.error("Error saving user:", err);
+          // Handle the error appropriately (e.g., return an error response)
+            res.json({
+              pwEmail: "Error saving user password",
+            });
+          return;
         }
+
+        // Password updated successfully, proceed with sending the email
+        // Your email sending logic goes here
+        console.log(newPw);
+        sendEmail(em, newPw);
+        res.json({
+        pwEmail: "New password has been sent to your email",
+        });
+      });
     });
-    console.log(newPw)
-    sendEmail(em, newPw)
-    res.json({
-        pwEmail: "New password has been sent to your email"
-    })
+
+    // User.findOne({
+    //     email: em
+    // }, (err, uL) => {
+    //     if (!err) {
+    //         uL.password = newPw;
+    //         uL.pwAttempts = 0;
+    //         uL.save();
+    //     }
+    // });
+    
 })
 // change password
 router.post('/pwreset', authenticateToken, (req, res) => {
