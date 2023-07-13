@@ -4,7 +4,7 @@ const Playlist = require('../models/Playlist');
 const Review = require('../models/Review')
 const User = require('../models/User')
 const router = new Router()
-const {ObjectId, mongoose} = require('mongoose');
+const { mongoose} = require('mongoose');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const pwlifetime = 120000; // 60 000 = 1 minute in ms 2 min
@@ -52,13 +52,10 @@ async function sendEmail(email, pw) {
 }
 
 function generateAccessToken(user) {
-    let expIn;
-    if (user.updatedAt) {
-        expIn = user.updatedAt
-    } else {
-        expIn = user.createdAt
-    }
-    expIn = pwlifetime - (Date.now() - expIn);
+    let expIn = Math.max(
+      pwlifetime - (Date.now() - (user.updatedAt || user.createdAt)),
+      0
+    );
     if (expIn <= 0) {
         let newPassword = genRandPass();
         User.findOne({
@@ -126,7 +123,7 @@ router.post('/login', (req, res) => {
                                 password: uL.password,
                                 name: uL.name,
                                 createdAt: uL.createdAt,
-                                updatedAt: uL.updatedAt,
+                                updatedAt: uL.updatedAt,//
                                 userIsNew: uL.userIsNew
                             })
                             let ret = JSON.parse(JSON.stringify(uL));
