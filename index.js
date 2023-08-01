@@ -14,13 +14,13 @@ const userRouter = require("./routes/user.routes.js");
 
 const app = express();
 var corsOptions = {
-    origin: `*`//["https://movies-app-playlists.netlify.app"
-  }
+  origin: `https://movies-app-playlists.netlify.app`, //["https://movies-app-playlists.netlify.app"
+};
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     next();
+//   });
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', mainRouter)
