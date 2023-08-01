@@ -8,7 +8,7 @@ const { mongoose} = require('mongoose');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const pwlifetime = 600000; // 60 000 = 1 minute 
-const minpwlifetime = 600000; 
+const minpwlifetime = 60000; 
 const pwInterval = 10000; 
 
 function genRandPass() {
