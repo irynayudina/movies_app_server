@@ -7,9 +7,9 @@ const router = new Router()
 const { mongoose} = require('mongoose');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
-const pwlifetime = 120000; // 60 000 = 1 minute in ms 2 min
-const minpwlifetime = 60000; // 1 min
-const pwInterval = 10000; // 10 seconds
+const pwlifetime = 600000; // 60 000 = 1 minute 
+const minpwlifetime = 600000; 
+const pwInterval = 10000; 
 
 function genRandPass() {
     let spchars = '!@#$%^&*()~'
@@ -56,18 +56,21 @@ function generateAccessToken(user) {
       pwlifetime - (Date.now() - (user.updatedAt || user.createdAt)),
       0
     );
-    if (expIn <= 0) {
+      if (expIn <= 0) {
         let newPassword = genRandPass();
-        User.findOne({
-            email: user.email
-        }, (err, uL) => {
+        User.findOne(
+          {
+            email: user.email,
+          },
+          (err, uL) => {
             uL.password = newPassword;
             uL.save();
-        });
-        console.log(newPassword)
-        sendEmail(user.email, newPassword)
-        return "Check email"
-    }
+          }
+        );
+        console.log(newPassword);
+        sendEmail(user.email, newPassword);
+        return "Check email";
+      }
     expIn = expIn.toString();
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: expIn
